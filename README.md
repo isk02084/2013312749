@@ -1,5 +1,4 @@
 # What is Redis?
-* * *
 
 Redis is often referred as a ***data structures*** server.
 
