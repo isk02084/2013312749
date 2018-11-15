@@ -106,7 +106,7 @@ void library :: input() {
 			input_file >> member_name;
 			flag = 1;
 
-			//database(count, date, resource_type, resource_name, operation, member_type, member_name);
+			database(count, date, resource_type, resource_name, operation, member_type, member_name);
 		}
 		else{
 			input_file2 >> space_type;
@@ -120,7 +120,7 @@ void library :: input() {
 			}
 			flag = 2;
 
-			//space_database(count, date2, space_type, space_number, operation2, member_type2, member_name2, number_of_member, in_time);
+			space_database(count, date2, space_type, space_number, operation2, member_type2, member_name2, number_of_member, in_time);
 
 		}
 
@@ -322,6 +322,74 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 	}
 
 }
+
+void library :: space_database(int count, string date2, string space_type, string space_number, string operation2, string member_type2, string member_name2, string number_of_member, string in_time) {
+	// code = 8
+	if(space_type == "StudyRoom"){
+		if(space_number > 10 || space_number ==0 ){
+			output(count, 8, "Invalid space id.");
+			return;
+		}
+	}
+	if(space_type == "Seat"){
+		if(space_number > 3 || space_number == 0){
+			output(count, 8, "Invalid space id.");
+			return;
+		}
+	}
+
+
+	//code 9
+	int hour = dateTohour(date2);
+	if(operation2 == "B"){
+		if(space_type == "StudyRoom"){
+			if(hour >= 18 || hour < 9){
+				output(count, 9, "This space is not available now. Available from 09 to 18.");
+				return;
+			}
+		}
+		else if(space_number == 2){
+			if(hour >= 21 || hour < 9){
+				output(count, 9, "This space is not available now. Available from 09 to 21.");
+				return;
+			}
+		}
+		else if(space_number == 3){
+			if(hour >= 18 || hour < 9){
+				output(count, 9, "This space is not available now. Available from 09 to 18.");
+				return;
+			}
+		}
+	}
+
+	
+	//code 10
+	if(operation2 != "B"){
+		if(space_type == "StudyRoom"){
+			for(auto s : studyrooms){
+				if(s.get_studyroom_number()==space_number){
+					if(s.get_name() != member_name2){
+						output(count, 10, "You did not borrow this place.")
+						return;
+					}
+				}
+			}
+		}
+		else{
+			for(auto s : seats){
+				if(s.get_seat_floor()==space_number){
+					if(s.get_name() != member_name2){
+						output(count, 10, "You did not borrow this place.")
+						return;
+					}
+				}
+			}
+		}
+
+	}
+	
+}
+
 
 void library :: output(int op_num, int return_code, string description) {
 	ofstream file;

@@ -19,6 +19,7 @@ public:
 	void bookshelf();
 	void input();
 	void database(int count, string d, string r_t, string r_n, string op, string m_t, string m_n);
+	space_database(int count, string date2, string space_type, string space_number, string operation2, string member_type2, string member_name2, string number_of_member, string in_time);
 	void output(int op_num, int return_code, string description);
 	int dateToint(string date);
 	string intTodate(int date);
