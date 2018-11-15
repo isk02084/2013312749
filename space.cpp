@@ -5,7 +5,7 @@ using namespace std;
 
 space :: space() {
 	name = "";
-	time = 0;
+	time = 24;
 	status = 0;
 }
 
@@ -23,6 +23,13 @@ void space :: set_time(int input_time) {
 
 int space :: get_time() {
 	return time;
+}
+
+void space :: set_status(int input_status){
+	status = input_status;
+}
+int space :: get_status() {
+	return status;
 }
 
 /*studyroom :: studyroom() {
@@ -47,4 +54,12 @@ void seat :: set_seat_floor(int input_floor) {
 
 int seat :: get_seat_floor() {
 	return seat_floor;
+}
+
+void seat :: set_wantempty(int input_want) {
+	wantempty = input_want;
+}
+
+int seat :: get_wantempty() {
+	return wantempty;
 }

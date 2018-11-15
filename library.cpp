@@ -856,28 +856,28 @@ void library :: space_database(int count, string date2, string space_type, strin
 
 	//code 9
 	int hour = dateTohour(date2);
-	if(operation2 == "B"){
-		if(space_type == "StudyRoom"){
-			if(hour >= 18 || hour < 9){
-				output(count, 9, "This space is not available now. Available from 09 to 18.");
-				return;
-			}
+
+	if(space_type == "StudyRoom"){
+		if(hour >= 18 || hour < 9){
+			output(count, 9, "This space is not available now. Available from 09 to 18.");
+			return;
 		}
-		else if(space_number == 2){
-			if(hour >= 21 || hour < 9){
-				output(count, 9, "This space is not available now. Available from 09 to 21.");
-				return;
-			}
+	}
+	else if(space_number == 2){
+		if(hour >= 21 || hour < 9){
+			output(count, 9, "This space is not available now. Available from 09 to 21.");
+			return;
 		}
-		else if(space_number == 3){
-			if(hour >= 18 || hour < 9){
-				output(count, 9, "This space is not available now. Available from 09 to 18.");
-				return;
-			}
+	}
+	else if(space_number == 3){
+		if(hour >= 18 || hour < 9){
+			output(count, 9, "This space is not available now. Available from 09 to 18.");
+			return;
 		}
 	}
 
-	
+
+
 	//code 10
 	if(operation2 != "B"){
 		if(space_type == "StudyRoom"){
@@ -894,7 +894,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 			for(auto s : seats){
 				if(s.get_seat_floor()==space_number){
 					if(s.get_name() != member_name2){
-						output(count, 10, "You did not borrow this place.")
+						output(count, 10, "You did not borrow this place.");
 						return;
 					}
 				}
@@ -903,6 +903,271 @@ void library :: space_database(int count, string date2, string space_type, strin
 
 	}
 	
+	//code 11
+	if(operation2 == "B"){
+		if(space_type == "StudyRoom"){
+			for(auto s : studyrooms){
+				if(s.get_name() == member_name2){
+					output(count, 11, "You already borrowed this kind of space.");
+					return;
+				}
+			}
+		}
+		else{
+			for(auto s : seats){
+				if(s.get_name() == member_name2){
+					output(count, 11, "You already borrowed this kind of space.");
+					return;
+				}
+			}
+		}
+	}
+
+	//code 12
+	if(operation2 == "B"){
+		if(space_type == "StudyRoom"){
+			if(number_of_member > 6){
+				output(count, 12, "Exceed available number.")
+				return;
+			}
+		}
+		else{
+			if(number_of_member > 1){
+				output(count, 12, "Exceed available number.")
+				return;
+			}
+		}
+	}
+
+	//code 13
+	if(operation2 == "B"){
+		if(space_type == "StudyRoom"){
+			if(in_time > 3){
+				output(count, 12, "Exceed available time.")
+				return;
+			}
+		}
+		else{
+			if(in_time > 3){
+				output(count, 12, "Exceed available time.")
+				return;
+			}
+		}
+	}
+
+	//code 14
+	string error;
+	int limit;
+	string s_limit;
+	int seat_limit=24;
+	int flag_limit=0;
+	if(operation2 == "B"){
+		if(space_type == "StudyRoom"){
+			for(auto s : studyrooms){
+				if(s.get_studyroom_number() == space_number){
+					limit = s.get_time()+3;
+					s_limit = to_string(limit);
+					if(limit>=0 && limit <=9){
+						s_limit = "0" + s_limit;
+					}
+					error = "There is no remain space. This space is available after " + s_limit + ".";
+					output(count, 14, error);
+				}
+			}
+		}
+		else{
+			if(space_number == 3){           // 3 floor
+				for(auto s : seats){
+					if(s.get_seat_floor() == 3){
+						if(s.get_status() != 0){
+							if(seat_limit >= s.get_time() + 3){
+								seat_limit = s.get_time() + 3;
+								if(seat_limit > 18) seat_limit = 18;
+							}
+							
+						}
+						else{
+							flag_limit = 1;
+						}
+					}
+				}
+				if(flag_limit == 0){
+					s_limit = to_string(seat_limit);
+					if(seat_limit>=0 && seat_limit <=9){
+						s_limit = "0" + s_limit;
+					}
+					error = "There is no remain space. This space is available after " + s_limit + ".";
+					output(count, 14, error);
+				}
+			}
+			else if(space_number == 2){           // 2 floor
+				for(auto s : seats){
+					if(s.get_seat_floor() == 2){
+						if(s.get_status() != 0){
+							if(seat_limit >= s.get_time() + 3){
+								seat_limit = s.get_time() + 3;
+								if(seat_limit > 21) seat_limit = 21;
+							}
+							
+						}
+						else{
+							flag_limit = 1;
+						}
+					}
+				}
+				if(flag_limit == 0){
+					s_limit = to_string(seat_limit);
+					if(seat_limit>=0 && seat_limit <=9){
+						s_limit = "0" + s_limit;
+					}
+					error = "There is no remain space. This space is available after " + s_limit + ".";
+					output(count, 14, error);
+				}
+			}
+			else if(space_number == 1){           // 1 floor
+				for(auto s : seats){
+					if(s.get_seat_floor() == 1){
+						if(s.get_status() != 0){
+							if(seat_limit >= s.get_time() + 3){
+								seat_limit = s.get_time() + 3;
+								if(seat_limit > 24) seat_limit = 24;
+							}
+							
+						}
+						else{
+							flag_limit = 1;
+						}
+					}
+				}
+				if(flag_limit == 0){
+					s_limit = to_string(seat_limit);
+					if(seat_limit>=0 && seat_limit <=9){
+						s_limit = "0" + s_limit;
+					}
+					if(seat_limit == 24) s_limit = "00";
+					error = "There is no remain space. This space is available after " + s_limit + ".";
+					output(count, 14, error);
+				}
+			}
+		}
+	}
+
+	//code =0 success
+	if(operation2 == "B"){
+		if(space_type == "StudyRoom"){
+			int i = 0;
+			for(auto s : studyrooms){
+				if(s.get_studyroom_number() == space_number){
+					s.set_name(member_name2);
+					s.set_time(in_time);
+					s.set_status(1);
+					studyrooms.push_back(s);
+					studyrooms.erase(studyrooms.begin() + i);
+				}
+				i++;
+			}
+		}
+		else{
+			i = 0;
+			for(auto s : seats){
+				if(s.get_seat_floor() == space_number){
+					s.set_name(member_name2);
+					s.set_time(in_time);
+					s.set_status(1);
+					seats.push_back(s);
+					seats.erase(seats.begin() + i);
+				}
+				i++;
+			}
+		}
+		output(count, 0, "Success.");
+		return;
+	}
+	else if(operation2 == "R"){
+		if(space_type == "StudyRoom"){
+			i = 0;
+			for(auto s : studyrooms){
+				if(s.get_studyroom_number() == space_number){
+					s.set_name("");
+					s.set_time(24);
+					s.set_status(0);
+					studyrooms.push_back(s);
+					studyrooms.erase(studyrooms.begin() + i);
+				}
+				i++;
+			}			
+		}
+		else{
+			i = 0;
+			for(auto s : seats){
+				if(s.get_seat_floor() == space_number){
+					s.set_name("");
+					s.set_time(24);
+					s.set_status(0);
+					s.set_wantempty(0);
+					seats.push_back(s);
+					seats.erase(seats.begin() + i);
+				}
+				i++;
+			}
+		}
+		output(count, 0, "Success.");
+		return;
+	}
+	else if(operation2 == "E"){
+		if(space_type == "StudyRoom"){
+			i = 0;
+			for(auto s : studyrooms){
+				if(s.get_studyroom_number() == space_number){
+					s.set_status(2);
+					studyrooms.push_back(s);
+					studyrooms.erase(studyrooms.begin() + i);
+				}
+				i++;
+			}			
+		}
+		else{
+			i = 0;
+			for(auto s : seats){
+				if(s.get_seat_floor() == space_number){
+					s.set_status(2);
+					s.set_wantempty(dateTohour(date2));
+					seats.push_back(s);
+					seats.erase(seats.begin() + i);
+				}
+				i++;
+			}
+		}
+		output(count, 0, "Success.");
+		return;
+	}
+	else if(operation2 == "C"){
+		if(space_type == "StudyRoom"){
+			i = 0;
+			for(auto s : studyrooms){
+				if(s.get_studyroom_number() == space_number){
+					s.set_status(1);
+					studyrooms.push_back(s);
+					studyrooms.erase(studyrooms.begin() + i);
+				}
+				i++;
+			}			
+		}
+		else{
+			i = 0;
+			for(auto s : seats){
+				if(s.get_seat_floor() == space_number){
+					s.set_status(1);
+					s.set_wantempty(0);
+					seats.push_back(s);
+					seats.erase(seats.begin() + i);
+				}
+				i++;
+			}
+		}
+		output(count, 0, "Success.");
+		return;
+	}
 }
 
 

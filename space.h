@@ -13,6 +13,8 @@ public:
 	string get_name();
 	void set_time(int input_time);
 	int get_time();
+	void set_status(int input_status);
+	int get_status();
 
 };
 
@@ -29,8 +31,11 @@ public :
 class seat : public space{
 private :
 	int seat_floor;
+	int wantempty;
 public : 
 
 	void set_seat_floor(int input_floor);
 	int get_seat_floor();
+	void set_wantempty(int input_want);
+	int get_wantempty();
 };
