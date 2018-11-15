@@ -6,6 +6,7 @@
 using namespace std;
 
 library :: library() {
+	day_check = 0;
 	int i;
 	for(i=0;i<10;i++){                  //make studyroom
 		studyroom S;
@@ -105,7 +106,7 @@ void library :: input() {
 				flag_space_file = 1;
 				date2 = "9999/12/30/10";
 			}
-			if(day_check =0 ) {
+			if(day_check ==0 ) {
 				day_check = dateToint2(date2);
 			}
 		}
@@ -138,7 +139,7 @@ void library :: input() {
 			}
 			flag = 2;
 			emptyorclear(date2);
-			space_database(count, date2, space_type, space_number, operation2, member_type2, member_name2, number_of_member, in_time);
+			space_database(count, date2, space_type, space_number, operation2, member_type2, member_name2, stoi(number_of_member), stoi(in_time));
 
 		}
 
@@ -841,16 +842,16 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 
 }
 
-void library :: space_database(int count, string date2, string space_type, string space_number, string operation2, string member_type2, string member_name2, string number_of_member, string in_time) {
+void library :: space_database(int count, string date2, string space_type, string space_number, string operation2, string member_type2, string member_name2, int number_of_member, int in_time) {
 	// code = 8
 	if(space_type == "StudyRoom"){
-		if(space_number > 10 || space_number ==0 ){
+		if(stoi(space_number) > 10 || stoi(space_number) ==0 ){
 			output(count, 8, "Invalid space id.");
 			return;
 		}
 	}
 	if(space_type == "Seat"){
-		if(space_number > 3 || space_number == 0){
+		if(stoi(space_number) > 3 || stoi(space_number) == 0){
 			output(count, 8, "Invalid space id.");
 			return;
 		}
@@ -866,13 +867,13 @@ void library :: space_database(int count, string date2, string space_type, strin
 			return;
 		}
 	}
-	else if(space_number == 2){
+	else if(stoi(space_number) == 2){
 		if(hour >= 21 || hour < 9){
 			output(count, 9, "This space is not available now. Available from 09 to 21.");
 			return;
 		}
 	}
-	else if(space_number == 3){
+	else if(stoi(space_number) == 3){
 		if(hour >= 18 || hour < 9){
 			output(count, 9, "This space is not available now. Available from 09 to 18.");
 			return;
@@ -885,9 +886,9 @@ void library :: space_database(int count, string date2, string space_type, strin
 	if(operation2 != "B"){
 		if(space_type == "StudyRoom"){
 			for(auto s : studyrooms){
-				if(s.get_studyroom_number()==space_number){
+				if(s.get_studyroom_number()==stoi(space_number)){
 					if(s.get_name() != member_name2){
-						output(count, 10, "You did not borrow this place.")
+						output(count, 10, "You did not borrow this space.");
 						return;
 					}
 				}
@@ -895,9 +896,9 @@ void library :: space_database(int count, string date2, string space_type, strin
 		}
 		else{
 			for(auto s : seats){
-				if(s.get_seat_floor()==space_number){
+				if(s.get_seat_floor()==stoi(space_number)){
 					if(s.get_name() != member_name2){
-						output(count, 10, "You did not borrow this place.");
+						output(count, 10, "You did not borrow this space.");
 						return;
 					}
 				}
@@ -930,13 +931,13 @@ void library :: space_database(int count, string date2, string space_type, strin
 	if(operation2 == "B"){
 		if(space_type == "StudyRoom"){
 			if(number_of_member > 6){
-				output(count, 12, "Exceed available number.")
+				output(count, 12, "Exceed available number.");
 				return;
 			}
 		}
 		else{
 			if(number_of_member > 1){
-				output(count, 12, "Exceed available number.")
+				output(count, 12, "Exceed available number.");
 				return;
 			}
 		}
@@ -946,13 +947,13 @@ void library :: space_database(int count, string date2, string space_type, strin
 	if(operation2 == "B"){
 		if(space_type == "StudyRoom"){
 			if(in_time > 3){
-				output(count, 12, "Exceed available time.")
+				output(count, 13, "Exceed available time.");
 				return;
 			}
 		}
 		else{
 			if(in_time > 3){
-				output(count, 12, "Exceed available time.")
+				output(count, 13, "Exceed available time.");
 				return;
 			}
 		}
@@ -967,19 +968,24 @@ void library :: space_database(int count, string date2, string space_type, strin
 	if(operation2 == "B"){
 		if(space_type == "StudyRoom"){
 			for(auto s : studyrooms){
-				if(s.get_studyroom_number() == space_number){
-					limit = s.get_time()+3;
-					s_limit = to_string(limit);
-					if(limit>=0 && limit <=9){
-						s_limit = "0" + s_limit;
+				if(s.get_studyroom_number() == stoi(space_number)){
+					if(s.get_status() != 0){
+						limit = s.get_time()+3;
+						if(limit >= 18) limit = 18;
+						s_limit = to_string(limit);
+						if(limit>=0 && limit <=9){
+							s_limit = "0" + s_limit;
+						}
+						error = "There is no remain space. This space is available after " + s_limit + ".";
+						output(count, 14, error);
+						return;
 					}
-					error = "There is no remain space. This space is available after " + s_limit + ".";
-					output(count, 14, error);
+					
 				}
 			}
 		}
 		else{
-			if(space_number == 3){           // 3 floor
+			if(stoi(space_number) == 3){           // 3 floor
 				for(auto s : seats){
 					if(s.get_seat_floor() == 3){
 						if(s.get_status() != 0){
@@ -1001,9 +1007,10 @@ void library :: space_database(int count, string date2, string space_type, strin
 					}
 					error = "There is no remain space. This space is available after " + s_limit + ".";
 					output(count, 14, error);
+					return;
 				}
 			}
-			else if(space_number == 2){           // 2 floor
+			else if(stoi(space_number) == 2){           // 2 floor
 				for(auto s : seats){
 					if(s.get_seat_floor() == 2){
 						if(s.get_status() != 0){
@@ -1025,9 +1032,10 @@ void library :: space_database(int count, string date2, string space_type, strin
 					}
 					error = "There is no remain space. This space is available after " + s_limit + ".";
 					output(count, 14, error);
+					return;
 				}
 			}
-			else if(space_number == 1){           // 1 floor
+			else if(stoi(space_number) == 1){           // 1 floor
 				for(auto s : seats){
 					if(s.get_seat_floor() == 1){
 						if(s.get_status() != 0){
@@ -1050,17 +1058,19 @@ void library :: space_database(int count, string date2, string space_type, strin
 					if(seat_limit == 24) s_limit = "00";
 					error = "There is no remain space. This space is available after " + s_limit + ".";
 					output(count, 14, error);
+					return;
 				}
 			}
 		}
 	}
 
 	//code =0 success
+	int i;
 	if(operation2 == "B"){
 		if(space_type == "StudyRoom"){
-			int i = 0;
+			i = 0;
 			for(auto s : studyrooms){
-				if(s.get_studyroom_number() == space_number){
+				if(s.get_studyroom_number() == stoi(space_number)){
 					s.set_name(member_name2);
 					s.set_time(dateTohour(date2));
 					s.set_status(1);
@@ -1074,13 +1084,14 @@ void library :: space_database(int count, string date2, string space_type, strin
 		else{
 			i = 0;
 			for(auto s : seats){
-				if(s.get_seat_floor() == space_number){
+				if(s.get_seat_floor() == stoi(space_number) && s.get_status() == 0){
 					s.set_name(member_name2);
 					s.set_time(dateTohour(date2));
 					s.set_status(1);
 					s.set_use_time(in_time);
 					seats.push_back(s);
 					seats.erase(seats.begin() + i);
+					break;
 				}
 				i++;
 			}
@@ -1092,7 +1103,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 		if(space_type == "StudyRoom"){
 			i = 0;
 			for(auto s : studyrooms){
-				if(s.get_studyroom_number() == space_number){
+				if(s.get_studyroom_number() == stoi(space_number)){
 					s.set_name("");
 					s.set_time(24);
 					s.set_status(0);
@@ -1106,7 +1117,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 		else{
 			i = 0;
 			for(auto s : seats){
-				if(s.get_seat_floor() == space_number){
+				if(s.get_seat_floor() == stoi(space_number) && s.get_name()==member_name2){
 					s.set_name("");
 					s.set_time(24);
 					s.set_status(0);
@@ -1125,7 +1136,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 		if(space_type == "StudyRoom"){
 			i = 0;
 			for(auto s : studyrooms){
-				if(s.get_studyroom_number() == space_number){
+				if(s.get_studyroom_number() == stoi(space_number)){
 					s.set_status(2);
 					studyrooms.push_back(s);
 					studyrooms.erase(studyrooms.begin() + i);
@@ -1136,7 +1147,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 		else{
 			i = 0;
 			for(auto s : seats){
-				if(s.get_seat_floor() == space_number){
+				if(s.get_seat_floor() == stoi(space_number) && s.get_name() == member_name2){
 					s.set_status(2);
 					s.set_wantempty(dateTohour(date2));
 					seats.push_back(s);
@@ -1152,7 +1163,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 		if(space_type == "StudyRoom"){
 			i = 0;
 			for(auto s : studyrooms){
-				if(s.get_studyroom_number() == space_number){
+				if(s.get_studyroom_number() == stoi(space_number)){
 					s.set_status(1);
 					studyrooms.push_back(s);
 					studyrooms.erase(studyrooms.begin() + i);
@@ -1163,7 +1174,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 		else{
 			i = 0;
 			for(auto s : seats){
-				if(s.get_seat_floor() == space_number){
+				if(s.get_seat_floor() == stoi(space_number) && s.get_name() == member_name2){
 					s.set_status(1);
 					s.set_wantempty(0);
 					seats.push_back(s);
@@ -1252,76 +1263,61 @@ int library :: dateTohour(string date2) {
 
 
 void library :: emptyorclear(string date2) {
-
+	int i;
 	if(day_check < dateToint2(date2)){                     //change date
-		if(space_type == "StudyRoom"){
-			i = 0;
-			for(auto s : studyrooms){
-				
-				s.set_name("");
-				s.set_time(24);
-				s.set_status(0);
-				s.set_use_time(0);
-				studyrooms.push_back(s);
-				studyrooms.erase(studyrooms.begin() + i);
-			
-				i++;
-			}			
+		studyrooms.clear();
+		seats.clear();
+		for(i=0;i<10;i++){                  //make studyroom
+			studyroom S;
+			S.set_studyroom_number(i+1);
+			studyrooms.push_back(S);
 		}
-		else{
-			i = 0;
-			for(auto s : seats){
-				
-				s.set_name("");
-				s.set_time(24);
-				s.set_status(0);
-				s.set_use_time(0);
-				s.set_wantempty(0);
-				seats.push_back(s);
-				seats.erase(seats.begin() + i);
-				
-				i++;
+		int j;
+		for(i=0;i<3;i++){				//make seat
+			for(j=0;j<50;j++){
+				seat T;
+				T.set_seat_floor(i+1);
+				seats.push_back(T);
 			}
 		}
 		day_check = dateToint2(date2);
 	}
 	else {
-		if(space_type == "StudyRoom"){
-			i = 0;
-			for(auto s : studyrooms){
-				if(s.get_status() != 0 && dateTohour(date2) >= (s.get_use_time() + s.get_time())){
-					s.set_name("");
-					s.set_time(24);
-					s.set_status(0);
-					studyrooms.push_back(s);
-					studyrooms.erase(studyrooms.begin() + i);
-				}
-				i++;
-			}			
-		}
-		else{
-			i = 0;
-			for(auto s : seats){
-				if(s.get_status() == 1 && dateTohour(date2) >= (s.get_use_time() + s.get_time())){
-					s.set_name("");
-					s.set_time(24);
-					s.set_status(0);
-					s.set_wantempty(0);
-					seats.push_back(s);
-					seats.erase(seats.begin() + i);
-				}
-				else if(s.get_status() == 2 && dateTohour(date2) >= (1 + s.get_wantempty())){
-					s.set_name("");
-					s.set_time(24);
-					s.set_status(0);
-					s.set_wantempty(0);
-					seats.push_back(s);
-					seats.erase(seats.begin() + i);
-				}
-				i++;
+		i = 0;
+		for(auto s : studyrooms){
+			if(s.get_status() != 0 && dateTohour(date2) >= (s.get_use_time() + s.get_time())){
+				s.set_name("");
+				s.set_time(24);
+				s.set_status(0);
+				studyrooms.push_back(s);
+				studyrooms.erase(studyrooms.begin() + i);
+				i--;
 			}
+			i++;
+		}			
+
+		i = 0;
+		for(auto s : seats){
+			if(s.get_status() == 1 && dateTohour(date2) >= (s.get_use_time() + s.get_time())){
+				s.set_name("");
+				s.set_time(24);
+				s.set_status(0);
+				s.set_wantempty(0);
+				seats.push_back(s);
+				seats.erase(seats.begin() + i);
+				i--;
+			}
+			else if(s.get_status() == 2 && dateTohour(date2) >= (1 + s.get_wantempty())){
+				s.set_name("");
+				s.set_time(24);
+				s.set_status(0);
+				s.set_wantempty(0);
+				seats.push_back(s);
+				seats.erase(seats.begin() + i);
+				i--;
+			}
+			i++;
 		}
 
 	}
-
 }

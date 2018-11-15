@@ -12,5 +12,5 @@ member.o : member.cpp
 	g++ -std=c++11 -c member.cpp
 space.o : space.cpp
 	g++ -std=c++11 -c space.cpp
-clean : 
-	rm test main.o resource.o member.o library.o
+clean :
+	rm test main.o resource.o member.o space.o library.o
