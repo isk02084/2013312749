@@ -7,6 +7,7 @@ private:
 	string name;
 	int time;
 	int status;			// 0 : not use  1: using   2:use but no people(empty)
+	int use_time;
 public:
 	space();
 	void set_name(string input);
@@ -15,16 +16,20 @@ public:
 	int get_time();
 	void set_status(int input_status);
 	int get_status();
+	void set_use_time(int in_time);
+	int get_use_time();
 
 };
 
 class studyroom : public space{
 private :
 	int studyroom_number;
+	
 public : 
 
 	void set_studyroom_number(int input_number);
 	int get_studyroom_number();
+
 	
 };
 

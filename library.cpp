@@ -105,6 +105,9 @@ void library :: input() {
 				flag_space_file = 1;
 				date2 = "9999/12/30/10";
 			}
+			if(day_check =0 ) {
+				day_check = dateToint2(date2);
+			}
 		}
 
 		if(flag_book_file ==1 && flag_space_file ==1){
@@ -134,7 +137,7 @@ void library :: input() {
 				input_file2 >> in_time;
 			}
 			flag = 2;
-
+			emptyorclear(date2);
 			space_database(count, date2, space_type, space_number, operation2, member_type2, member_name2, number_of_member, in_time);
 
 		}
@@ -1059,8 +1062,9 @@ void library :: space_database(int count, string date2, string space_type, strin
 			for(auto s : studyrooms){
 				if(s.get_studyroom_number() == space_number){
 					s.set_name(member_name2);
-					s.set_time(in_time);
+					s.set_time(dateTohour(date2));
 					s.set_status(1);
+					s.set_use_time(in_time);
 					studyrooms.push_back(s);
 					studyrooms.erase(studyrooms.begin() + i);
 				}
@@ -1072,8 +1076,9 @@ void library :: space_database(int count, string date2, string space_type, strin
 			for(auto s : seats){
 				if(s.get_seat_floor() == space_number){
 					s.set_name(member_name2);
-					s.set_time(in_time);
+					s.set_time(dateTohour(date2));
 					s.set_status(1);
+					s.set_use_time(in_time);
 					seats.push_back(s);
 					seats.erase(seats.begin() + i);
 				}
@@ -1091,6 +1096,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 					s.set_name("");
 					s.set_time(24);
 					s.set_status(0);
+					s.set_use_time(0);
 					studyrooms.push_back(s);
 					studyrooms.erase(studyrooms.begin() + i);
 				}
@@ -1104,6 +1110,7 @@ void library :: space_database(int count, string date2, string space_type, strin
 					s.set_name("");
 					s.set_time(24);
 					s.set_status(0);
+					s.set_use_time(0);
 					s.set_wantempty(0);
 					seats.push_back(s);
 					seats.erase(seats.begin() + i);
@@ -1244,3 +1251,77 @@ int library :: dateTohour(string date2) {
 }
 
 
+void library :: emptyorclear(string date2) {
+
+	if(day_check < dateToint2(date2)){                     //change date
+		if(space_type == "StudyRoom"){
+			i = 0;
+			for(auto s : studyrooms){
+				
+				s.set_name("");
+				s.set_time(24);
+				s.set_status(0);
+				s.set_use_time(0);
+				studyrooms.push_back(s);
+				studyrooms.erase(studyrooms.begin() + i);
+			
+				i++;
+			}			
+		}
+		else{
+			i = 0;
+			for(auto s : seats){
+				
+				s.set_name("");
+				s.set_time(24);
+				s.set_status(0);
+				s.set_use_time(0);
+				s.set_wantempty(0);
+				seats.push_back(s);
+				seats.erase(seats.begin() + i);
+				
+				i++;
+			}
+		}
+		day_check = dateToint2(date2);
+	}
+	else {
+		if(space_type == "StudyRoom"){
+			i = 0;
+			for(auto s : studyrooms){
+				if(s.get_status() != 0 && dateTohour(date2) >= (s.get_use_time() + s.get_time())){
+					s.set_name("");
+					s.set_time(24);
+					s.set_status(0);
+					studyrooms.push_back(s);
+					studyrooms.erase(studyrooms.begin() + i);
+				}
+				i++;
+			}			
+		}
+		else{
+			i = 0;
+			for(auto s : seats){
+				if(s.get_status() == 1 && dateTohour(date2) >= (s.get_use_time() + s.get_time())){
+					s.set_name("");
+					s.set_time(24);
+					s.set_status(0);
+					s.set_wantempty(0);
+					seats.push_back(s);
+					seats.erase(seats.begin() + i);
+				}
+				else if(s.get_status() == 2 && dateTohour(date2) >= (1 + s.get_wantempty())){
+					s.set_name("");
+					s.set_time(24);
+					s.set_status(0);
+					s.set_wantempty(0);
+					seats.push_back(s);
+					seats.erase(seats.begin() + i);
+				}
+				i++;
+			}
+		}
+
+	}
+
+}
