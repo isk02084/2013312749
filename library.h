@@ -13,6 +13,7 @@ private:
 	vector<undergraduate> undergraduates;
 	vector<studyroom> studyrooms;
 	vector<seat> seats;
+	int day_check;
 
 public:
 	library();
@@ -25,4 +26,5 @@ public:
 	string intTodate(int date);
 	int dateToint2(string date2);
 	int dateTohour(string date2);
+	void emptyorclear(string date2);
 };

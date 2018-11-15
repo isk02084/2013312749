@@ -44,6 +44,13 @@ int studyroom :: get_studyroom_number() {
 	return studyroom_number;
 }
 
+void space :: set_use_time(int in_time){
+	use_time = in_time;
+}
+int space :: get_use_time(){
+	return use_time;
+}
+
 /*seat :: seat() {
 
 }*/
