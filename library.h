@@ -3,6 +3,7 @@
 #include <string>
 #include "member.h"
 #include "resource.h"
+#include "space.h"
 
 using namespace std;
 
@@ -14,6 +15,8 @@ private:
 	vector<undergraduate> undergraduates;
 	vector<graduate> graduates;
 	vector<faculty> facultys;
+	vector<studyroom> studyrooms;
+	vector<seat> seats;
 
 public:
 	library();
@@ -23,4 +26,6 @@ public:
 	void output(int op_num, int return_code, string description);
 	int dateToint(string date);
 	string intTodate(int date);
+	int dateToint2(string date2);
+	int dateTohour(string date2);
 };
