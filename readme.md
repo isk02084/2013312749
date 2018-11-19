@@ -1,6 +1,6 @@
-#Project1
+# Project1
 
-##resoure.h
+## resoure.h
 
 기본적으로 set함수는 private에 선언된 변수에 input을 저장해주는 함수이다.
 get함수는 변수에 저장된 값을 읽는 함수이다.
@@ -12,7 +12,7 @@ resource class를 상속받는 book class가 있으며 변수는 3개가 있다.
 	string date_borrow; // 책이 빌려진 시점을 저장한다.
 	string date_return; // 책을 반납해야되는 시점을 저장한다.
 
-##member.h
+## member.h
 
 마찬가지로 변수에 대하여 set함수와 get함수가 있다.
 
@@ -25,7 +25,7 @@ member class를 상속받는 undergraduate class가 있으며 변수는 5개가 
 	string book_name; // 빌린 책 이름을 저장한다.
 	int book_borrow; // 빌릴 수 있는 책의 권수를 저장한다.
 
-##library.h
+## library.h
 
 변수로는 vector type의 books와 undergraduates가 있다. input으로 들어간 자료가 저장된다.
 함수로는 7가지 기능을 하는 함수가 존재한다.
@@ -38,12 +38,12 @@ member class를 상속받는 undergraduate class가 있으며 변수는 5개가 
 	string intTodate(int date); // output.dat에 에러코드를 write할 때 날짜를 써주기 위해 만든 함수이다. 일 단위로 계산된 date를 input으로 받아 year/month/day 형태로 return된다.
 
 
-#Project2
+# Project2
 
 project1에서 도서 관리 시스템을 만들었다면 project2는 space 관리 시스템을 만든다.
 기존 도서 관리 시스템과 동시에 동작되어야 하기 때문에 library.h에 space 관리 시스템을 추가하였다.
 
-##space.h
+## space.h
 space class에는 4가지 변수가 존재한다.
 	string name;	// 빌린 사람의 이름을 저장한다.
 	int time;	// 빌린 날짜의 시간을 저장한다.
@@ -54,7 +54,7 @@ space class에는 4가지 변수가 존재한다.
 studyroom class에는 studyroom의 번호를 나타내는 studyroom_number 변수가 있다.
 seat class에는 seat의 층수를 저장하는 seat_floor 변수와 E operation을 위한 wantempty 변수가 존재한다.
 
-##library.h
+## library.h
 변경된 함수는 다음과 같다.
 	library(); // space인 studyroom 10개와 seat 3층 50개를 vector로 만들어준다. 
 	input();// input 파일을 추가로 space.dat를 열어 class 변수에 저장한다. 여기서 도서 관리 시스템과 동시에 동작이 되고, 날짜 순서로 시스템이 동작 되기 때문에 date 비교하여 관리 시스템을 동작하도록 하였다.
