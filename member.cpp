@@ -25,28 +25,28 @@ int member :: get_capacitor(){
 }
 
 undergraduate :: undergraduate() {
-	date = "";
 	ban = false;
 	date_ban = "";
-	book_name = "";
 	book_borrow = 0;
 }
 
 undergraduate :: undergraduate(string m_name) {
-	date = "";
 	ban = false;
 	date_ban = "";
-	book_name = "";
 	book_borrow = 0;
 	set_name(m_name);
 }
 
-void undergraduate :: set_date(string date2) {
-	date = date2;
+void undergraduate :: set_list(string name, int date) {
+	list.insert(make_pair(name,date));
 }
 
-string undergraduate :: get_date() {
-	return date;
+void undergraduate :: erase_list(string name) {
+	list.erase(name);
+}
+
+int undergraduate :: get_date(string name) {
+	return list.find(name)->second;
 }
 
 void undergraduate :: set_ban(bool ban2) {
@@ -65,12 +65,10 @@ string undergraduate :: get_date_ban() {
 	return date_ban;
 }
 
-void undergraduate :: set_book_name(string name) {
-	book_name = name;
-}
-
-string undergraduate :: get_book_name() {
-	return book_name;
+bool undergraduate :: get_book_name(string name) {
+	if(list.find(name) == list.end()) {
+		return false;
+	} return true;
 }
 
 void undergraduate :: set_borrow(int borrow) {
@@ -79,6 +77,14 @@ void undergraduate :: set_borrow(int borrow) {
 
 int undergraduate :: get_borrow() {
 	return book_borrow;
+}
+
+int undergraduate :: get_min_date() {
+	int min = 10000000;
+	for(auto s : list) {
+		if(s.second < min) min = s.second;
+	}
+	return min;
 }
 
 graduate :: graduate() {

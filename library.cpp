@@ -294,7 +294,7 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 		for (auto s : undergraduates) {
 			if(s.get_name() == m_n) {
 				flag = 1;
-				if(s.get_book_name() != r_n) {
+				if(s.get_book_name(r_n) == false) {
 					output(count, 3, "You did not borrow this book.");
 					return;
 				}
@@ -329,10 +329,9 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 		int i =0;
 		for (auto s : undergraduates) {
 			if(s.get_name() == m_n) {
-				if(s.get_book_name() == r_n) {
-					if(r_t == "E-book" && dateToint(s.get_date())+13 < dateToint(d)) {
-						s.set_date("");
-						s.set_book_name("");
+				if(s.get_book_name(r_n) == true) {
+					if(r_t == "E-book" && s.get_date(r_n)+13 < dateToint(d)) {
+						s.erase_list(r_n);
 						for(auto k : e_books) {
 							if(k.get_name() == r_n) s.set_capacitor(-k.get_size());
 						}
@@ -340,7 +339,7 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 						undergraduates.erase(undergraduates.begin() + i);
 						break;
 					} else {
-						error = "You already borrow this book at " + s.get_date();
+						error = "You already borrow this book at " + intTodate(s.get_date(r_n));
 						output(count, 4, error);
 						return;
 					}
@@ -450,13 +449,12 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 		int i = 0;
 		for (auto s : undergraduates) {
 			if(s.get_name() == m_n) {
-				if(dateToint(s.get_date())+13 < dateToint(d)) {
-					error = "Delayed return. You'll be restricted until " + intTodate(2*dateToint(d) - dateToint(s.get_date())-13);
-					s.set_date_ban(intTodate(2*dateToint(d) - dateToint(s.get_date())-13));
-					s.set_date("");
+				if(s.get_date(r_n)+13 < dateToint(d)) {
+					error = "Delayed return. You'll be restricted until " + intTodate(2*dateToint(d) - s.get_date(r_n)-13);
+					s.set_date_ban(intTodate(2*dateToint(d) - s.get_date(r_n)-13));
 					s.set_ban(true);
-					s.set_book_name("");
 					s.set_borrow(s.get_borrow()-1);
+					s.erase_list(r_n);
 					undergraduates.push_back(s);
 					undergraduates.erase(undergraduates.begin() + i);
 					i = 0;
@@ -625,10 +623,9 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 			int i = 0;
 			for (auto s : undergraduates) {
 				if(s.get_name() == m_n) {
-					s.set_date(d);
 					s.set_ban(false);
 					s.set_date_ban("");
-					s.set_book_name(r_n);
+					s.set_list(r_n,dateToint(d));
 					s.set_borrow(s.get_borrow()+1);
 					if(r_t == "E-book") {
 						for(auto k : e_books) {
@@ -644,10 +641,9 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 			}
 			if(flag == 0) {
 				undergraduate A(m_n);
-				A.set_date(d);
 				A.set_ban(false);
 				A.set_date_ban("");
-				A.set_book_name(r_n);
+				A.set_list(r_n, dateToint(d));
 				A.set_borrow(A.get_borrow()+1);
 				if(r_t == "E-book") {
 					for(auto k : e_books) {
@@ -792,10 +788,9 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 			int i = 0;
 			for (auto s : undergraduates) {
 				if(s.get_name() == m_n) {
-					s.set_date("");
 					s.set_ban(false);
 					s.set_date_ban("");
-					s.set_book_name("");
+					s.erase_list(r_n);
 					s.set_borrow(s.get_borrow()-1);
 					if(r_t == "E-book") {
 						for(auto k : e_books) {
@@ -1316,7 +1311,7 @@ int library :: dateToint2(string date2) {
 	day += date2[9];
 
 	//cout << year << month << day << endl;
-	int result = stoi(year) * 360 + stoi(month)*30 + stoi(day);
+	int result = stoi(year) * 360 + (stoi(month)-1)*30 + (stoi(day)-1);
 	//cout << result << endl;
 	return result;
 }

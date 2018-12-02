@@ -17,24 +17,24 @@ public:
 
 class undergraduate : public member{
 private :
-	string date;
+	map<string, int> list;
 	bool ban;
 	string date_ban;
-	string book_name;
 	int book_borrow;
 public : 
 	undergraduate();
 	undergraduate(string m_name);
-	void set_date(string date2);
-	string get_date();
+	void set_list(string name,int date);
+	void erase_list(string name);
+	int get_date(string name);
 	void set_ban(bool ban2);
 	bool get_ban();
 	void set_date_ban(string date_ban2);
 	string get_date_ban();
-	void set_book_name(string name);
-	string get_book_name();
+	bool get_book_name(string name);
 	void set_borrow(int borrow);
 	int get_borrow();
+	int get_min_date();
 };
 
 class graduate : public member{
