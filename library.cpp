@@ -798,7 +798,7 @@ string library :: intTodate(int date) {
 	if(year.length()==1) year = "0" + year;
 	month = to_string(1+(date%360)/30);
 	if(month.length()==1) month = "0" + month;
-	day = to_string((date%360)%30);
+	day = to_string((date%360)%30+1);
 	if(day.length()==1) day = "0" + day;
 
 	//cout << year + "/" + month + "/" + day << endl;
