@@ -138,8 +138,76 @@ void library :: input() {
 				input_file2 >> in_time;
 			}
 			flag = 2;
-			emptyorclear(date2);
-			space_database(count, date2, space_type, space_number, operation2, member_type2, member_name2, stoi(number_of_member), stoi(in_time));
+			
+			int check = 0;
+			try{
+				if(dateToint2(date2) <= dateToint("09/12/30")){
+					check = 1;
+					throw check;
+				}
+				else if(space_type != "StudyRoom" && space_type != "Seat"){
+					check = 2;
+					throw check;
+				}
+				else if(operation2 != "B" && operation2 != "R" && operation2 != "E" && operation2 != "C"){
+					check = 3;
+					throw check;
+				}
+				else if(member_type2 != "Undergraduate" && member_type2 != "Graduate" && member_type2 != "Faculty"){
+					check = 4;
+					throw check;
+				}
+
+				int ii;
+				int flag2 = 0;
+				string jj;
+				for(ii = 0 ; ii<10; ii++){
+					jj = to_string(ii);
+					if(member_name2.find(jj) != -1){
+						flag2 = 1;
+					}
+				}
+				
+
+				if(flag2 == 1){
+					check = 5;
+					throw check;
+				}
+				else if(operation2 == "B" && stoi(in_time) <= 0){
+					check = 6;
+					throw check;
+				}
+				else{
+					emptyorclear(date2);
+					space_database(count, date2, space_type, space_number, operation2, member_type2, member_name2, stoi(number_of_member), stoi(in_time));
+				}
+				
+			} catch(int expn){
+				char x;
+				while(1){
+					input_file2.get(x);
+					if(x=='\n') break;
+				}
+				if(expn == 1){
+					output(count, -1, "Date out of range");
+				}
+				else if(expn == 2){
+					output(count, -1, "Non-exist space type");
+				}
+				else if(expn == 3){
+					output(count, -1, "Non-exist operation");
+				}
+				else if(expn == 4){
+					output(count, -1, "Non-exist member type");
+				}
+				else if(expn == 5){
+					output(count, -1, "Member name with numbers");
+				}
+				else if(expn == 6){
+					output(count, -1, "Negative time");
+				}
+			}
+			
 
 		}
 
