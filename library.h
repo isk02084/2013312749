@@ -9,7 +9,11 @@ using namespace std;
 class library {
 private:
 	vector<book> books;
+	vector<magazine> magazines;
+	vector<e_book> e_books;
 	vector<undergraduate> undergraduates;
+	vector<graduate> graduates;
+	vector<faculty> facultys;
 
 public:
 	library();

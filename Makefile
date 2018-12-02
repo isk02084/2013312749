@@ -10,4 +10,6 @@ resource.o : resource.cpp
 	g++ -std=c++11 -c resource.cpp
 member.o : member.cpp
 	g++ -std=c++11 -c member.cpp
+clean : 
+	rm test main.o resource.o member.o library.o
 
