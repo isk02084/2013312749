@@ -82,7 +82,7 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 	int mag_m;
 	string mag_n;
 	int y = dateToint(d)/360;
-	int m = (dateToint(d)%360)/30;
+	int m = (dateToint(d)%360)/30+1;
 	//code 1
 	int flag = 0;
 	if(r_t == "Magazine"){
@@ -97,7 +97,8 @@ void library :: database(int count, string d, string r_t, string r_n, string op,
 		if(s.get_name() == r_n) flag = 1;
 	}
 	for( auto s : magazines) {
-		if(op!="R" && s.get_name() == mag_n && (y*12+m) - (mag_y*12+mag_m) < 12 && (y*12+m) - (mag_y*12+mag_m) >= 0) flag = 1;
+		if(s.get_name() == mag_n && (y*12+m) - (mag_y*12+mag_m) < 12 && (y*12+m) - (mag_y*12+mag_m) >= 0) flag = 1;
+		else if(s.get_name() == mag_n && (y*12+m) - (mag_y*12+mag_m) >= 12 && op=="R") flag =1;
 	}
 	for( auto s : e_books) {
 		if(s.get_name() == r_n) flag = 1;
