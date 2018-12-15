@@ -214,6 +214,33 @@ then
 		./library
 		cp ./output.dat ./result/input/faculty.dat
 
+	elif [ $2 = "date" ]
+	then
+		echo -e "Date[yy/mm/dd]\tResource_type\tResource_name\tOperation\tMember_type\tMember_name" > ./input.dat
+		year=`echo $3 | cut -d'/' -f1`
+		month=`echo $3 | cut -d'/' -f2`
+		day=`echo $3 | cut -d'/' -f3`
+		from=`echo $year$month$day`
+		year2=`echo $4 | cut -d'/' -f1`
+		month2=`echo $4 | cut -d'/' -f2`
+		day2=`echo $4 | cut -d'/' -f3`
+		to=`echo $year2$month2$day2`
+		while read dat r_t r_n oper m_t m_n 
+		do	
+			if [ $dat != "Date[yy/mm/dd]" ]
+			then
+				year3=`echo $dat | cut -d'/' -f1`
+				month3=`echo $dat | cut -d'/' -f2`
+				day3=`echo $dat | cut -d'/' -f3`
+				check=`echo $year3$month3$day3`
+				if [ $from -le $check -a $check -le $to ]
+				then
+					echo -e "$dat\t$r_t\t$r_n\t$oper\t$m_t\t$m_n" >> ./input.dat
+				fi
+			fi
+		done < ./input.bak
+		./library
+		cp ./output.dat ./result/input/date.dat
 	fi
 
 	cp ./space.bak ./space.dat
@@ -297,7 +324,7 @@ then
 		./library
 		cp ./output.dat ./result/space/graduate.dat
 	
-	lif [ $2 = "faculty" ]
+	elif [ $2 = "faculty" ]
 	then
 		echo -e "Date[yy/mm/dd/hh]\tSpace_type\tSpace_number\tOperation\tMember_type\tMember_name\tNumber_of_member\tTime" > ./space.dat
 		while read dat s_t s_n oper m_t m_n n_m tim
@@ -367,6 +394,36 @@ then
 		./library
 		cp ./output.dat ./result/space/faculty.dat
 
+	elif [ $2 = "date" ]
+	then
+		echo -e "Date[yy/mm/dd/hh]\tSpace_type\tSpace_number\tOperation\tMember_type\tMember_name\tNumber_of_member\tTime" > ./space.dat
+		year=`echo $3 | cut -d'/' -f1`
+		month=`echo $3 | cut -d'/' -f2`
+		day=`echo $3 | cut -d'/' -f3`
+		hour=`echo $3 | cut -d'/' -f4`
+		from=`echo 20$year$month$day$hour`
+		year2=`echo $4 | cut -d'/' -f1`
+		month2=`echo $4 | cut -d'/' -f2`
+		day2=`echo $4 | cut -d'/' -f3`
+		hour2=`echo $4 | cut -d'/' -f4`
+		to=`echo 20$year2$month2$day2$hour2`
+		while read dat s_t s_n oper m_t m_n n_m tim
+		do	
+			if [ $dat != "Date[yy/mm/dd/hh]" ]
+			then
+				year3=`echo $dat | cut -d'/' -f1`
+				month3=`echo $dat | cut -d'/' -f2`
+				day3=`echo $dat | cut -d'/' -f3`
+				hour3=`echo $dat | cut -d'/' -f4`
+				check=`echo $year3$month3$day3$hour3`
+				if [ $from -le $check -a $check -le $to ]
+				then
+					echo -e "$dat\t$s_t\t$s_n\t$oper\t$m_t\t$m_n\t$n_m\t$tim" >> ./space.dat
+				fi
+			fi
+		done < ./space.bak
+		./library
+		cp ./output.dat ./result/space/date.dat
 	fi
 
 	cp ./space.bak ./space.dat

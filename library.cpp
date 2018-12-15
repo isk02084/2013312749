@@ -136,6 +136,9 @@ void library :: input() {
 			if(operation2 == "B") {
 				input_file2 >> number_of_member;
 				input_file2 >> in_time;
+			} else {
+				number_of_member="0";
+				in_time="0";
 			}
 			flag = 2;
 			
