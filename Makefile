@@ -1,7 +1,7 @@
 # makefile
 
-test : main.o resource.o member.o space.o library.o
-	g++ -std=c++11 -o test main.o resource.o member.o space.o library.o
+library : main.o resource.o member.o space.o library.o
+	g++ -std=c++11 -o library main.o resource.o member.o space.o library.o
 main.o : main.cpp
 	g++ -std=c++11 -c main.cpp
 library.o : library.cpp	
@@ -13,4 +13,4 @@ member.o : member.cpp
 space.o : space.cpp
 	g++ -std=c++11 -c space.cpp
 clean :
-	rm test main.o resource.o member.o space.o library.o
+	rm library main.o resource.o member.o space.o library.o
