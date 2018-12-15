@@ -430,9 +430,227 @@ then
 	cp ./input.bak ./input.dat
 	rm ./input.bak
 	rm ./space.bak
+	./library
 
 elif [ $1 = "output" ]
 then
+	if [ $2 = "stat_table" ]
+	then
+		mkdir -p ./result/output
+
+		./library
+		code_array=(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+		echo -e "Return_code\tNumber" > result/output/stat_table.dat
+		while read oper ret desc
+		do
+			for ((i=0;i<17;i++)); do
+				if [ $ret = $i ]
+				then
+					((code_array[$i]++))
+				elif [ $ret = -1 ]
+				then
+					((code_array[17]++))
+				fi
+			done
+		done < ./output.dat
+
+		for ((i=0;i<17;i++)); do
+			echo -e "$i\t${code_array[$i]}" >> result/output/stat_table.dat
+		done
+		echo -e "-1\t${code_array[17]}" >> result/output/stat_table.dat
+	fi
+
+elif [ $1 = "all" ]
+then
+	mkdir -p ./result/resource
+	echo -e "Type\tName" > result/resource/book.dat
+	while read A B
+	do
+		if [ $A = "Book" ]
+		then
+			echo -e "$A\t$B" >> result/resource/book.dat
+		fi
+	done < ./resource.dat
+	echo -e "Type\tName" > result/resource/e-book.dat
+	while read A B
+	do
+		if [ $A = "E-book" ]
+		then
+			echo -e "$A\t$B" >> result/resource/e-book.dat
+		fi
+	done < ./resource.dat
+	echo -e "Type\tName" > result/resource/magazine.dat
+	while read A B
+	do
+		if [ $A = "Magazine" ]
+		then
+			echo -e "$A\t$B" >> result/resource/magazine.dat
+		fi
+	done < ./resource.dat
+
+	
+	mkdir -p ./result/input
+	cp ./input.dat ./input.bak
+	cp ./space.dat ./space.bak
+	rm ./space.dat
+	echo -e "Date[yy/mm/dd]\tResource_type\tResource_name\tOperation\tMember_type\tMember_name" > ./input.dat
+	while read dat r_t r_n oper m_t m_n 
+	do	
+		if [ $r_t = "Book" ]
+		then
+			echo -e "$dat\t$r_t\t$r_n\t$oper\t$m_t\t$m_n" >> ./input.dat
+		fi
+	done < ./input.bak
+	./library
+	cp ./output.dat ./result/input/book.dat
+	cp ./input.bak ./input.dat
+	echo -e "Date[yy/mm/dd]\tResource_type\tResource_name\tOperation\tMember_type\tMember_name" > ./input.dat
+	while read dat r_t r_n oper m_t m_n 
+	do	
+		if [ $r_t = "E-book" ]
+		then
+			echo -e "$dat\t$r_t\t$r_n\t$oper\t$m_t\t$m_n" >> ./input.dat
+		fi
+	done < ./input.bak
+	./library
+	cp ./output.dat ./result/input/e-book.dat
+	cp ./input.bak ./input.dat
+	echo -e "Date[yy/mm/dd]\tResource_type\tResource_name\tOperation\tMember_type\tMember_name" > ./input.dat
+	while read dat r_t r_n oper m_t m_n 
+	do	
+		if [ $r_t = "Magazine" ]
+		then
+			echo -e "$dat\t$r_t\t$r_n\t$oper\t$m_t\t$m_n" >> ./input.dat
+		fi
+	done < ./input.bak
+	./library
+	cp ./output.dat ./result/input/magazine.dat
+	cp ./input.bak ./input.dat
+	echo -e "Date[yy/mm/dd]\tResource_type\tResource_name\tOperation\tMember_type\tMember_name" > ./input.dat
+	while read dat r_t r_n oper m_t m_n 
+	do	
+		if [ $m_t = "Undergraduate" ]
+		then
+			echo -e "$dat\t$r_t\t$r_n\t$oper\t$m_t\t$m_n" >> ./input.dat
+		fi
+	done < ./input.bak
+	./library
+	cp ./output.dat ./result/input/undergraduate.dat
+	cp ./input.bak ./input.dat
+	echo -e "Date[yy/mm/dd]\tResource_type\tResource_name\tOperation\tMember_type\tMember_name" > ./input.dat
+	while read dat r_t r_n oper m_t m_n 
+	do	
+		if [ $m_t = "Graduate" ]
+		then
+			echo -e "$dat\t$r_t\t$r_n\t$oper\t$m_t\t$m_n" >> ./input.dat
+		fi
+	done < ./input.bak
+	./library
+	cp ./output.dat ./result/input/graduate.dat
+	cp ./input.bak ./input.dat
+	echo -e "Date[yy/mm/dd]\tResource_type\tResource_name\tOperation\tMember_type\tMember_name" > ./input.dat
+	while read dat r_t r_n oper m_t m_n 
+	do	
+		if [ $m_t = "Faculty" ]
+		then
+			echo -e "$dat\t$r_t\t$r_n\t$oper\t$m_t\t$m_n" >> ./input.dat
+		fi
+	done < ./input.bak
+	./library
+	cp ./output.dat ./result/input/faculty.dat	
+	cp ./space.bak ./space.dat
+	cp ./input.bak ./input.dat
+	rm ./input.bak
+	rm ./space.bak
+	./library
+
+
+	mkdir -p ./result/space
+	cp ./input.dat ./input.bak
+	cp ./space.dat ./space.bak
+	rm ./input.dat
+	echo -e "Date[yy/mm/dd/hh]\tSpace_type\tSpace_number\tOperation\tMember_type\tMember_name\tNumber_of_member\tTime" > ./space.dat
+	while read dat s_t s_n oper m_t m_n n_m tim
+	do	
+		if [ $s_t = "StudyRoom" ]
+		then
+			echo -e "$dat\t$s_t\t$s_n\t$oper\t$m_t\t$m_n\t$n_m\t$tim" >> ./space.dat
+		fi
+	done < ./space.bak
+	./library
+	cp ./output.dat ./result/space/studyroom.dat
+	cp ./space.bak ./space.dat
+	echo -e "Date[yy/mm/dd/hh]\tSpace_type\tSpace_number\tOperation\tMember_type\tMember_name\tNumber_of_member\tTime" > ./space.dat
+	while read dat s_t s_n oper m_t m_n n_m tim
+	do	
+		if [ $s_t = "Seat" ]
+		then
+			echo -e "$dat\t$s_t\t$s_n\t$oper\t$m_t\t$m_n\t$n_m\t$tim" >> ./space.dat
+		fi
+	done < ./space.bak
+	./library
+	cp ./output.dat ./result/space/seat.dat
+	cp ./space.bak ./space.dat
+	echo -e "Date[yy/mm/dd/hh]\tSpace_type\tSpace_number\tOperation\tMember_type\tMember_name\tNumber_of_member\tTime" > ./space.dat
+	while read dat s_t s_n oper m_t m_n n_m tim
+	do	
+		if [ $m_t = "Undergraduate" ]
+		then
+			echo -e "$dat\t$s_t\t$s_n\t$oper\t$m_t\t$m_n\t$n_m\t$tim" >> ./space.dat
+		fi
+	done < ./space.bak
+	./library
+	cp ./output.dat ./result/space/undergraduate.dat
+	cp ./space.bak ./space.dat
+	echo -e "Date[yy/mm/dd/hh]\tSpace_type\tSpace_number\tOperation\tMember_type\tMember_name\tNumber_of_member\tTime" > ./space.dat
+	while read dat s_t s_n oper m_t m_n n_m tim
+	do	
+		if [ $m_t = "Graduate" ]
+		then
+			echo -e "$dat\t$s_t\t$s_n\t$oper\t$m_t\t$m_n\t$n_m\t$tim" >> ./space.dat
+		fi
+	done < ./space.bak
+	./library
+	cp ./output.dat ./result/space/graduate.dat
+	cp ./space.bak ./space.dat
+	echo -e "Date[yy/mm/dd/hh]\tSpace_type\tSpace_number\tOperation\tMember_type\tMember_name\tNumber_of_member\tTime" > ./space.dat
+	while read dat s_t s_n oper m_t m_n n_m tim
+	do	
+		if [ $m_t = "Faculty" ]
+		then
+			echo -e "$dat\t$s_t\t$s_n\t$oper\t$m_t\t$m_n\t$n_m\t$tim" >> ./space.dat
+		fi
+	done < ./space.bak
+	./library
+	cp ./output.dat ./result/space/faculty.dat
+	cp ./space.bak ./space.dat
+	cp ./input.bak ./input.dat
+	rm ./input.bak
+	rm ./space.bak
+	./library
+
+
 	mkdir -p ./result/output
+	./library
+	code_array=(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+	echo -e "Return_code\tNumber" > result/output/stat_table.dat
+	while read oper ret desc
+	do
+		for ((i=0;i<17;i++)); do
+			if [ $ret = $i ]
+			then
+				((code_array[$i]++))
+			elif [ $ret = -1 ]
+			then
+				((code_array[17]++))
+			fi
+		done
+	done < ./output.dat
+
+	for ((i=0;i<17;i++)); do
+		echo -e "$i\t${code_array[$i]}" >> result/output/stat_table.dat
+	done
+	echo -e "-1\t${code_array[17]}" >> result/output/stat_table.dat
+
 
 fi
